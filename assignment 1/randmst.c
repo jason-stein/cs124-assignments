@@ -1,3 +1,20 @@
+/*
+ *
+ *	randmst.c
+ *
+ *	Implements Kruskal's algorithm for finding Minimum Spanning Tree over
+ *	a randomly-generated complete undirected graph. 
+ *
+ *	Edge weights are calculated as Euclidean distance between vertex locations,
+ *	which are randomly selected in a unit object of variable dimension. 	
+ *
+ *	Usage: compile with "make randmst"
+ *	Execute as "./randmst flag numpoints numtrials dimension" (all integers)
+ *
+ */
+
+
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <time.h>
