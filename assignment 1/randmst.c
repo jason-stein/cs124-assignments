@@ -32,8 +32,8 @@ typedef struct set{
 } set;
 
 typedef struct edge{
-	int v1;
-	int v2;
+	short v1;
+	short v2;
 	float weight;
 } edge;
 
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]){
 		fflush(stdout);
 
 		edge* edgeList = generate(numpoints, dimension);
-		int nedges = numpoints*(numpoints-1)/2;
+		unsigned int nedges = numpoints*(numpoints-1)/2;
 		qsort(edgeList, nedges, sizeof(edge), compare);
 		
 		int nIncluded = 0, i, j;
@@ -163,7 +163,7 @@ edge* generate(int n, int dimension){
 		}
 	}
 	// turn the coordinates into an adjacency list with distance values 
-	int nedges = n*(n-1)/2;
+	unsigned int nedges = n*(n-1)/2;
 	edge* edgeList = (edge*) malloc(nedges * sizeof(edge));
 	edge* e;
 	for(i = 0; i < n; i++){
@@ -174,6 +174,7 @@ edge* generate(int n, int dimension){
 			e->weight = euclideanDist(locations[i], locations[j], dimension);
 		}
 	}
+	printf("malloced edges\n");
 	// we don't need the locations anymore!
 	for(i = 0; i < n; i++)
 		free(locations[i]);
@@ -228,7 +229,7 @@ set* link(set* s1, set* s2){
 // calls find on the top of set tree
 bool U(set* s1, set* s2){
 	s1 = find(s1);
-	s2 = find(s2)
+	s2 = find(s2);
 	if(s1 != s2){
 		link(s1, s2);
 		return true;
