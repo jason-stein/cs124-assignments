@@ -11,9 +11,11 @@
  *	Usage: compile with "make randmst"
  *	Execute as "./randmst flag numpoints numtrials dimension" (all integers)
  *
+ *	Output is "average numpoints numtrials dimension" where average is the mean
+ *	weight of the MST found over numtrials in a graph with numpoints vertices
+ *	where locations are drawn from a unit object of dimension = dimension.
+ *
  */
-
-
 
 #import <stdio.h>
 #import <stdlib.h>
@@ -26,11 +28,17 @@
 typedef struct set{
 	struct set* parent;
 	int rank;
-	// bool included;
+	bool included;
 } set;
 
+typedef struct edge{
+	int v1;
+	int v2;
+	float weight;
+} edge;
+
 // generates a randomized adjacency matrix over n points
-float** generate(int n, int dimension);
+edge* generate(int n, int dimension);
 // finds euclidean distance between two points input as lists of coordinates
 float euclideanDist(float* p1, float* p2, int dimension);
 // makes a new set
@@ -41,6 +49,8 @@ set* find(set* i);
 set* link(set* s1, set* s2);
 // finds union of two sets
 bool U(set* s1, set* s2);
+// compare 2 edges (for sorting)
+int compare(const void* a, const void* b);
 
 // implements Kruskal's Algorithm
 int main(int argc, char* argv[]){
@@ -79,16 +89,16 @@ int main(int argc, char* argv[]){
 	for(k = 0; k < numtrials; k++){
 		printf("Running trial # %d\r",k + 1);
 		fflush(stdout);
-		// make a new graph
-		float** adjMat = generate(numpoints, dimension);
-		if (adjMat == NULL)
-			return(-1);
-		int nIncluded = 0, i = 0, j = 0;
+
+		edge* edgeList = generate(numpoints, dimension);
+		int nedges = numpoints*(numpoints-1)/2;
+		qsort(edgeList, nedges, sizeof(edge), compare);
+		
+		int nIncluded = 0, i, j;
 		float minWeight;
-		set* a; 
-		int b; 
-		set* c; 
-		int d;
+		set* a;
+		set* b;
+		int index = 0; 
 		// initialize every vertex as a singleton set
 		set** sets = (set**) malloc(numpoints * sizeof(set*));
 		for(i = 0; i < numpoints; i++){
@@ -98,44 +108,32 @@ int main(int argc, char* argv[]){
 			sets[i] = s;
 		}
 		// we need to find numpoints - 1 best edges
+		edge ei;
 		while (nIncluded < numpoints - 1){
-			// find the min-weight edge
-			for(i = 0, minWeight = 2.0; i < numpoints; i++){
-				// adjMat is symmetric so we only need to iterate half (up to i)
-				for(j = 0; j < i; j++){
-					if(adjMat[i][j] < minWeight){
-						minWeight = adjMat[i][j];
-						a = sets[i];
-						b = i;
-						c = sets[j];
-						d = j;
-					}
-				}
-			}
+			// printf("index = %d\n", index);
+			ei = edgeList[index];
+			a = sets[ei.v1];
+			b = sets[ei.v2];
 			// if a and c are already linked, find will find the same root
 			a = find(a);
-			c = find(c);
+			b = find(b);
 			// and union will return false
-			if(U(a,c)){
+			if(U(a,b)){
 				// otherwise we take this edge in the MST
 				nIncluded++;
-				total += minWeight;
-				// sets[b]->included = sets[d]->included = true;
+				total += ei.weight;
+				sets[ei.v1]->included = sets[ei.v2]->included = true;
 			}
-			// printf("Taking edge (%d,%d) for cost of %f\n",b,d,adjMat[b][d]);
-			
-			// throw out this edge by maxing its cost
-			adjMat[b][d] = adjMat[d][b] = 2.0;
+			index ++;
 		}
 
 		for(i = 0; i < numpoints; i++){
 			// this was for testing
-			// assert(sets[i]->included == true);
+			assert(sets[i]->included == true);
 			free(sets[i]);
-			free(adjMat[i]);
 		}
 		free(sets);
-		free(adjMat);
+		// free(edgeList);
 	}
 	total /= numtrials;
 	clock_t end = clock();
@@ -145,7 +143,7 @@ int main(int argc, char* argv[]){
 }
 
 // randomly generates a new adjacency matrix
-float** generate(int n, int dimension){
+edge* generate(int n, int dimension){
 	// seed the RNG with current time -- always new
 	srand(time(NULL));
 	int i, j;
@@ -153,8 +151,9 @@ float** generate(int n, int dimension){
 	float** locations = (float**)malloc(n * sizeof(float*));
 	if (locations == NULL)
 		return NULL;
+	float* l;
     for (i = 0; i < n; i++){
-        float* l = (float*)malloc(dimension * sizeof(float));
+        l = (float*)malloc(dimension * sizeof(float));
     	if (l == NULL)
 			return NULL;
 		locations[i] = l;
@@ -165,26 +164,23 @@ float** generate(int n, int dimension){
 			locations[i][j] = (float) rand() / (float) RAND_MAX;
 		}
 	}
-	// turn the coordinates into an n * n adjacency matrix with distance values 
-	float** adjMat = (float **)malloc(n * sizeof(float *));
-	if (adjMat == NULL)
-		return NULL;
-    for (i = 0; i < n; i++){
-    	float* a = (float *)malloc(n * sizeof(float));
-    	if (a == NULL)
-    		return NULL;
-    	adjMat[i] = a;
-    }
+	// turn the coordinates into an adjacency list with distance values 
+	int nedges = n*(n-1)/2;
+	edge* edgeList = (edge*) malloc(nedges * sizeof(edge));
+	edge* e;
 	for(i = 0; i < n; i++){
-		for(j = 0; j < i; j++)
-			adjMat[i][j] = adjMat[j][i] = 
-				euclideanDist(locations[i], locations[j], dimension);
+		for(j = 0; j < i; j++){
+			e = &edgeList[i*(i-1)/2+j]; // triangular numbers plus offset
+			e->v1 = i;
+			e->v2 = j;
+			e->weight = euclideanDist(locations[i], locations[j], dimension);
+		}
 	}
 	// we don't need the locations anymore!
 	for(i = 0; i < n; i++)
 		free(locations[i]);
 	free(locations);
-	return (adjMat);
+	return (edgeList);
 }
 
 // calculates distance in 'dimension'-dimensional space via Pythagorean theorem
@@ -203,13 +199,12 @@ set* makeSet(){
 		return NULL;
 	s->parent = s;
 	s->rank = 0;
-	// s->included = false;
+	s->included = false;
 	return s;
 }
 
 // find implements path compression
 set* find(set* i){
-	// printf("%p, %p\n", i, i->parent);
 	if (i->parent != i)
 		i->parent = find(i->parent);
 	return i->parent;
@@ -240,4 +235,13 @@ bool U(set* s1, set* s2){
 	}
 	return false;
 }
-// nice
+
+int compare(const void* a, const void* b){
+	edge* e1 = (edge*) a;
+	edge* e2 = (edge*) b;
+	if(e1->weight > e2->weight)
+		return 1;
+	if(e1->weight < e2->weight)
+		return -1;
+	return 0;
+}
