@@ -130,6 +130,7 @@ int main(int argc, char* argv[]){
 				// otherwise we take this edge in the MST
 				nIncluded++;
 				total += ei.weight;
+				// printf("%d taking edge %d %d with weight %f\n", nIncluded, ei.v1, ei.v2, ei.weight);
 				// sets[ei.v1]->included = sets[ei.v2]->included = true;
 			}
 			index ++;

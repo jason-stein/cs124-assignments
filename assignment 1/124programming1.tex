@@ -1,0 +1,97 @@
+ \documentclass[11pt]{article}
+% \pagestyle{empty}
+
+\setlength{\oddsidemargin}{-0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.9 in}
+\setlength{\textwidth}{7.0 in}
+\setlength{\textheight}{9.0 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0.3 in}
+\setlength{\parskip}{0.1 in}
+\usepackage{epsf}
+\usepackage{pseudocode}
+\usepackage{amsmath}
+\usepackage{float}
+
+% \usepackage{times}
+% \usepackage{mathptm}
+
+\begin{document}
+	\begin{table}[h]
+		\centering
+		\caption{Results for Values of $n$ With $numtrials = 5, dimension = 4$}
+		\begin{tabular}{lll}
+			$n$                         & average $f(n)$                        & total time (seconds)                        \\ \hline
+			\multicolumn{1}{|l|}{128} & \multicolumn{1}{l|}{28.627} & \multicolumn{1}{l|}{0.0165} \\ \hline
+			\multicolumn{1}{|l|}{256}    & \multicolumn{1}{l|}{46.509}       & \multicolumn{1}{l|}{0.075}       \\ \hline
+			\multicolumn{1}{|l|}{512}    & \multicolumn{1}{l|}{76.25}       & \multicolumn{1}{l|}{0.300}       \\ \hline
+			\multicolumn{1}{|l|}{1024}    & \multicolumn{1}{l|}{130.42}       & \multicolumn{1}{l|}{1.259}       \\ \hline
+			\multicolumn{1}{|l|}{2048}    & \multicolumn{1}{l|}{216.420}       & \multicolumn{1}{l|}{5.378}       \\ \hline
+			\multicolumn{1}{|l|}{4096}    & \multicolumn{1}{l|}{360.030}       & \multicolumn{1}{l|}{23.28}       \\ \hline
+			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{602.38}       & \multicolumn{1}{l|}{97.43}       \\ \hline
+			\multicolumn{1}{|l|}{16384}    & \multicolumn{1}{l|}{1009.21}       & \multicolumn{1}{l|}{403.647}       \\ \hline
+			\multicolumn{1}{|l|}{32768}    & \multicolumn{1}{l|}{1686.93}       & \multicolumn{1}{l|}{1512.621}       \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	\begin{table}[h]
+		\centering
+		\caption{Results for Values of $n$ With $numtrials = 5, dimension = 0$}
+		\begin{tabular}{lll}
+			$n$                         & average $f(n)$                        & total time (seconds)                        \\ \hline
+			\multicolumn{1}{|l|}{128} & \multicolumn{1}{l|}{1.175} & \multicolumn{1}{l|}{0.0099} \\ \hline
+			\multicolumn{1}{|l|}{256}    & \multicolumn{1}{l|}{1.269}       & \multicolumn{1}{l|}{0.0417}       \\ \hline
+			\multicolumn{1}{|l|}{512}    & \multicolumn{1}{l|}{1.288}       & \multicolumn{1}{l|}{0.182}       \\ \hline
+			\multicolumn{1}{|l|}{1024}    & \multicolumn{1}{l|}{1.279}       & \multicolumn{1}{l|}{0.862}       \\ \hline
+			\multicolumn{1}{|l|}{2048}    & \multicolumn{1}{l|}{1.221}       & \multicolumn{1}{l|}{3.626}       \\ \hline
+			\multicolumn{1}{|l|}{4096}    & \multicolumn{1}{l|}{1.201}       & \multicolumn{1}{l|}{15.69}       \\ \hline
+			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{1.200}       & \multicolumn{1}{l|}{68.305}       \\ \hline
+		\end{tabular}
+	\end{table}
+	Estimated $f(n)$: $f(n) = 1.24$ (constant).\\
+	
+	\begin{table}[h]
+		\centering
+		\caption{Results for Values of $n$ With $numtrials = 5, dimension = 2$}
+		\begin{tabular}{lll}
+			$n$                         & average $f(n)$                        & total time (seconds)                        \\ \hline
+			\multicolumn{1}{|l|}{128} & \multicolumn{1}{l|}{7.209} & \multicolumn{1}{l|}{0.0146} \\ \hline
+			\multicolumn{1}{|l|}{256}    & \multicolumn{1}{l|}{10.637}       & \multicolumn{1}{l|}{0.0564}       \\ \hline
+			\multicolumn{1}{|l|}{512}    & \multicolumn{1}{l|}{15.090}       & \multicolumn{1}{l|}{0.248}       \\ \hline
+			\multicolumn{1}{|l|}{1024}    & \multicolumn{1}{l|}{20.890}       & \multicolumn{1}{l|}{1.040}       \\ \hline
+			\multicolumn{1}{|l|}{2048}    & \multicolumn{1}{l|}{29.718}       & \multicolumn{1}{l|}{4.493}       \\ \hline
+			\multicolumn{1}{|l|}{4096}    & \multicolumn{1}{l|}{41.84}       & \multicolumn{1}{l|}{19.319}       \\ \hline
+			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{59.025}       & \multicolumn{1}{l|}{81.468}       \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	\begin{table}[h]
+		\centering
+		\caption{Results for Values of $n$ With $numtrials = 5, dimension = 3$}
+		\begin{tabular}{lll}
+			$n$                         & average $f(n)$                        & total time (seconds)                        \\ \hline
+			\multicolumn{1}{|l|}{128} & \multicolumn{1}{l|}{17.598} & \multicolumn{1}{l|}{0.0149} \\ \hline
+			\multicolumn{1}{|l|}{256}    & \multicolumn{1}{l|}{27.813}       & \multicolumn{1}{l|}{0.0634}       \\ \hline
+			\multicolumn{1}{|l|}{512}    & \multicolumn{1}{l|}{43.433}       & \multicolumn{1}{l|}{0.266}       \\ \hline
+			\multicolumn{1}{|l|}{1024}    & \multicolumn{1}{l|}{67.536}       & \multicolumn{1}{l|}{1.140}       \\ \hline
+			\multicolumn{1}{|l|}{2048}    & \multicolumn{1}{l|}{107.44}       & \multicolumn{1}{l|}{4.941}       \\ \hline
+			\multicolumn{1}{|l|}{4096}    & \multicolumn{1}{l|}{168.67}       & \multicolumn{1}{l|}{20.70}       \\ \hline
+			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{266.96}       & \multicolumn{1}{l|}{88.464}       \\ \hline
+		\end{tabular}
+	\end{table}
+\newpage	
+\noindent Our implementation used Kruskal's algorithm. We chose this over Prim's algorithm because it only requires tracking a list of all the edges in the tree as candidates, rather than updating the list of candidates on each iteration, which we found easier to implement. We also learned some optimizing tricks for Kruskal's algorithm in class, such as path compression and union by rank, both of which were implemented in our code.\\
+\\
+Times for each run are listed in the tables above. Each doubling of $n$ corresponded to approximately a 4x increase in time. This makes sense because the number of edges that must be generated, sorted, and checked is quadratic in $n$, so it is reasonable for the time to increase quadratically as well. Times are slightly lower for smaller dimensions, as the calculation of Euclidean distance has fewer terms in smaller dimensions, and although this function runs in linear time in $n$ it is called a quadratic number of times, so even a slight increase is noticeable. In the case of dimension = 0 it is never called (weights are random uniform between 0 and 1), so this version is noticeably faster.\\
+\\
+The most surprising $f(n)$ was for dimension = 0, where we found that the weight was essentially constant. This is because, since the edge weights are all independent, increasing the number of points also increased the number of very small edge weights. Since number of edges in the graph grows faster than number of edges needed for an MST (the former is quadratic, while the latter is linear), while each larger MST contains more edges, it also contains a lower average edge cost. It seems that these two factors essentially cancel out, and leave a constant MST weight. The rest of the functions increase with $n$, with higher dimensions having higher rates of increase as well as higher base weights. This made more sense intuitively.
+\\
+\\
+At no point did we find the random number generator to create any aberrant behavior. We seeded with the current time on each iteration, so while the numbers were generated pseudorandomly, the sequence was different each time.
+\end{document}
+
+
+
+
+
