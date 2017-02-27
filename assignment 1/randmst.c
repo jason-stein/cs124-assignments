@@ -133,7 +133,7 @@ int main(int argc, char* argv[]){
 			free(sets[i]);
 		}
 		free(sets);
-		// free(edgeList);
+		free(edgeList);
 	}
 	total /= numtrials;
 	clock_t end = clock();
