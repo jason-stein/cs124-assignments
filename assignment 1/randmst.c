@@ -115,8 +115,6 @@ int main(int argc, char* argv[]){
 			a = sets[ei.v1];
 			b = sets[ei.v2];
 			// if a and c are already linked, find will find the same root
-			a = find(a);
-			b = find(b);
 			// and union will return false
 			if(U(a,b)){
 				// otherwise we take this edge in the MST
@@ -229,8 +227,10 @@ set* link(set* s1, set* s2){
 
 // calls find on the top of set tree
 bool U(set* s1, set* s2){
+	s1 = find(s1);
+	s2 = find(s2)
 	if(s1 != s2){
-		link(find(s1), find(s2));
+		link(s1, s2);
 		return true;
 	}
 	return false;
