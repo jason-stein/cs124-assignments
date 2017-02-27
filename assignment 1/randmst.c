@@ -32,8 +32,8 @@ typedef struct set{
 } set;
 
 typedef struct edge{
-	short v1;
-	short v2;
+	int v1;
+	int v2;
 	float weight;
 } edge;
 
