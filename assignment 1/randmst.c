@@ -8,7 +8,7 @@
  *	Edge weights are calculated as Euclidean distance between vertex locations,
  *	which are randomly selected in a unit object of variable dimension. 	
  *
- *	Usage: compile with "make randmst"
+ *	Usage: compile with "make"
  *	Execute as "./randmst flag numpoints numtrials dimension" (all integers)
  *
  *	Output is "average numpoints numtrials dimension" where average is the mean
@@ -31,19 +31,20 @@ typedef struct set{
 	// bool included;
 } set;
 
+// an edge is defined by two vertices and a weight
 typedef struct edge{
 	int v1;
 	int v2;
 	float weight;
 } edge;
 
-// generates a randomized adjacency matrix over n points
+// generates a randomized adjacency list over n points
 edge* generate(int n, int dimension);
-// finds euclidean distance between two points input as lists of coordinates
+// finds euclidean distance between two points input as arrays of coordinates
 float euclideanDist(float* p1, float* p2, int dimension);
 // makes a new set
 set* makeSet(void);
-// finds the parent of a set
+// finds the top parent of a set
 set* find(set* i);
 // links two sets
 set* link(set* s1, set* s2);
@@ -51,6 +52,7 @@ set* link(set* s1, set* s2);
 bool U(set* s1, set* s2);
 // compare 2 edges (for sorting)
 int compare(const void* a, const void* b);
+
 
 // implements Kruskal's Algorithm
 int main(int argc, char* argv[]){
@@ -82,25 +84,28 @@ int main(int argc, char* argv[]){
 	    printf("usage: ./randmst flag numpoints numtrials dimension\n");
 	    return(-1.);
 	}
+
+	// start timing
 	clock_t begin = clock();
-	int k;
 	float total = 0;
+
+	int k;
+
 	// for numtrials iterations...
 	for(k = 0; k < numtrials; k++){
-		printf("Running trial # %d\n",k + 1);
+		printf("Running trial # %d\r",k + 1);
 		fflush(stdout);
 
 		edge* edgeList = generate(numpoints, dimension);
-		printf("generated\n");
 		unsigned int nedges = numpoints*(numpoints-1)/2;
 		qsort(edgeList, nedges, sizeof(edge), compare);
-		printf("sorted\n");
 		
 		int nIncluded = 0, i, j;
 		float minWeight;
 		set* a;
 		set* b;
-		int index = 0; 
+		int index = 0;
+
 		// initialize every vertex as a singleton set
 		set** sets = (set**) malloc(numpoints * sizeof(set*));
 		for(i = 0; i < numpoints; i++){
@@ -109,7 +114,7 @@ int main(int argc, char* argv[]){
 				return(-1);
 			sets[i] = s;
 		}
-		printf("made sets\n");
+
 		// we need to find numpoints - 1 best edges
 		edge ei;
 		while (nIncluded < numpoints - 1){
@@ -138,8 +143,13 @@ int main(int argc, char* argv[]){
 		free(sets);
 		free(edgeList);
 	}
+
+	// find average MST weight
 	total /= numtrials;
+	// stop the clock
 	clock_t end = clock();
+
+	// report
 	printf("Time spent: %f\n", (double)(end - begin) / CLOCKS_PER_SEC);
 	printf("%f %d %d %d\n", total, numpoints, numtrials, dimension);
 	return 0;
@@ -167,7 +177,8 @@ edge* generate(int n, int dimension){
 			locations[i][j] = (float) rand() / (float) RAND_MAX;
 		}
 	}
-	// turn the coordinates into an adjacency list with distance values 
+
+	// turn the coordinates into an edge list with distance values 
 	unsigned int nedges = n*(n-1)/2;
 	edge* edgeList = (edge*) malloc(nedges * sizeof(edge));
 	edge* e;
@@ -179,10 +190,12 @@ edge* generate(int n, int dimension){
 			e->weight = euclideanDist(locations[i], locations[j], dimension);
 		}
 	}
+
 	// we don't need the locations anymore!
 	for(i = 0; i < n; i++)
 		free(locations[i]);
 	free(locations);
+
 	return (edgeList);
 }
 
@@ -241,6 +254,7 @@ bool U(set* s1, set* s2){
 	return false;
 }
 
+// comparison function for qsort-ing edges by weight
 int compare(const void* a, const void* b){
 	edge* e1 = (edge*) a;
 	edge* e2 = (edge*) b;
@@ -250,3 +264,5 @@ int compare(const void* a, const void* b){
 		return -1;
 	return 0;
 }
+
+// nice
