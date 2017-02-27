@@ -87,12 +87,14 @@ int main(int argc, char* argv[]){
 	float total = 0;
 	// for numtrials iterations...
 	for(k = 0; k < numtrials; k++){
-		printf("Running trial # %d\r",k + 1);
+		printf("Running trial # %d\n",k + 1);
 		fflush(stdout);
 
 		edge* edgeList = generate(numpoints, dimension);
+		printf("generated\n");
 		unsigned int nedges = numpoints*(numpoints-1)/2;
 		qsort(edgeList, nedges, sizeof(edge), compare);
+		printf("sorted\n");
 		
 		int nIncluded = 0, i, j;
 		float minWeight;
@@ -107,6 +109,7 @@ int main(int argc, char* argv[]){
 				return(-1);
 			sets[i] = s;
 		}
+		printf("made sets\n");
 		// we need to find numpoints - 1 best edges
 		edge ei;
 		while (nIncluded < numpoints - 1){
@@ -114,6 +117,8 @@ int main(int argc, char* argv[]){
 			ei = edgeList[index];
 			a = sets[ei.v1];
 			b = sets[ei.v2];
+			a = find(a);
+			b = find(b);
 			// if a and c are already linked, find will find the same root
 			// and union will return false
 			if(U(a,b)){
@@ -174,7 +179,6 @@ edge* generate(int n, int dimension){
 			e->weight = euclideanDist(locations[i], locations[j], dimension);
 		}
 	}
-	printf("malloced edges\n");
 	// we don't need the locations anymore!
 	for(i = 0; i < n; i++)
 		free(locations[i]);
