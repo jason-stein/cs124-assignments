@@ -36,6 +36,7 @@
 			\multicolumn{1}{|l|}{32768}    & \multicolumn{1}{l|}{1686.93}       & \multicolumn{1}{l|}{1512.621}       \\ \hline
 		\end{tabular}
 	\end{table}
+	Estimated $f(n)$: 
 	
 	\begin{table}[h]
 		\centering
@@ -67,7 +68,8 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{59.025}       & \multicolumn{1}{l|}{81.468}       \\ \hline
 		\end{tabular}
 	\end{table}
-	
+	Estimated $f(n)$: 
+	\newpage
 	\begin{table}[h]
 		\centering
 		\caption{Results for Values of $n$ With $numtrials = 5, dimension = 3$}
@@ -82,6 +84,7 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{266.96}       & \multicolumn{1}{l|}{88.464}       \\ \hline
 		\end{tabular}
 	\end{table}
+	Estimated $f(n)$: 
 \newpage	
 \noindent Our implementation used Kruskal's algorithm. We chose this over Prim's algorithm because it only requires tracking a list of all the edges in the tree as candidates, rather than updating the list of candidates on each iteration, which we found easier to implement. We also learned some optimizing tricks for Kruskal's algorithm in class, such as path compression and union by rank, both of which were implemented in our code.\\
 \\
