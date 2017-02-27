@@ -28,7 +28,7 @@
 typedef struct set{
 	struct set* parent;
 	int rank;
-	bool included;
+	// bool included;
 } set;
 
 typedef struct edge{
@@ -122,14 +122,14 @@ int main(int argc, char* argv[]){
 				// otherwise we take this edge in the MST
 				nIncluded++;
 				total += ei.weight;
-				sets[ei.v1]->included = sets[ei.v2]->included = true;
+				// sets[ei.v1]->included = sets[ei.v2]->included = true;
 			}
 			index ++;
 		}
 
 		for(i = 0; i < numpoints; i++){
 			// this was for testing
-			assert(sets[i]->included == true);
+			// assert(sets[i]->included == true);
 			free(sets[i]);
 		}
 		free(sets);
@@ -199,7 +199,7 @@ set* makeSet(){
 		return NULL;
 	s->parent = s;
 	s->rank = 0;
-	s->included = false;
+	// s->included = false;
 	return s;
 }
 
