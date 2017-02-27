@@ -13,6 +13,7 @@
 \usepackage{pseudocode}
 \usepackage{amsmath}
 \usepackage{float}
+\usepackage[pdftex]{graphicx}
 
 % \usepackage{times}
 % \usepackage{mathptm}
@@ -35,8 +36,8 @@
 			\multicolumn{1}{|l|}{16384}    & \multicolumn{1}{l|}{1009.21}       & \multicolumn{1}{l|}{403.647}       \\ \hline
 			\multicolumn{1}{|l|}{32768}    & \multicolumn{1}{l|}{1686.93}       & \multicolumn{1}{l|}{1512.621}       \\ \hline
 		\end{tabular}
-	\end{table}
-	Estimated $f(n)$: 
+	\end{table}\\
+	Estimated $f(n)$: $f(n) = 0.781n^{0.739}$
 	
 	\begin{table}[h]
 		\centering
@@ -52,7 +53,7 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{1.200}       & \multicolumn{1}{l|}{68.305}       \\ \hline
 		\end{tabular}
 	\end{table}
-	Estimated $f(n)$: $f(n) = 1.24$ (constant).\\
+	Estimated $f(n)$: $f(n) = 1.24$ (constant).
 	
 	\begin{table}[h]
 		\centering
@@ -68,7 +69,7 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{59.025}       & \multicolumn{1}{l|}{81.468}       \\ \hline
 		\end{tabular}
 	\end{table}
-	Estimated $f(n)$: 
+	Estimated $f(n)$: $f(n) = 0.650n^{0.501}$
 	\newpage
 	\begin{table}[h]
 		\centering
@@ -84,16 +85,18 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{266.96}       & \multicolumn{1}{l|}{88.464}       \\ \hline
 		\end{tabular}
 	\end{table}
-	Estimated $f(n)$: 
+	Estimated $f(n)$: $f(n) = 0.740n^{0.653}$
 \newpage	
 \noindent Our implementation used Kruskal's algorithm. We chose this over Prim's algorithm because it only requires tracking a list of all the edges in the tree as candidates, rather than updating the list of candidates on each iteration, which we found easier to implement. We also learned some optimizing tricks for Kruskal's algorithm in class, such as path compression and union by rank, both of which were implemented in our code.\\
 \\
 Times for each run are listed in the tables above. Each doubling of $n$ corresponded to approximately a 4x increase in time. This makes sense because the number of edges that must be generated, sorted, and checked is quadratic in $n$, so it is reasonable for the time to increase quadratically as well. Times are slightly lower for smaller dimensions, as the calculation of Euclidean distance has fewer terms in smaller dimensions, and although this function runs in linear time in $n$ it is called a quadratic number of times, so even a slight increase is noticeable. In the case of dimension = 0 it is never called (weights are random uniform between 0 and 1), so this version is noticeably faster.\\
 \\
-The most surprising $f(n)$ was for dimension = 0, where we found that the weight was essentially constant. This is because, since the edge weights are all independent, increasing the number of points also increased the number of very small edge weights. Since number of edges in the graph grows faster than number of edges needed for an MST (the former is quadratic, while the latter is linear), while each larger MST contains more edges, it also contains a lower average edge cost. It seems that these two factors essentially cancel out, and leave a constant MST weight. The rest of the functions increase with $n$, with higher dimensions having higher rates of increase as well as higher base weights. This made more sense intuitively.
+The most surprising $f(n)$ was for dimension = 0, where we found that the weight was essentially constant. This is because, since the edge weights are all independent, increasing the number of points also increased the number of very small edge weights. Since number of edges in the graph grows faster than number of edges needed for an MST (the former is quadratic, while the latter is linear), while each larger MST contains more edges, it also contains a lower average edge cost. It seems that these two factors essentially cancel out, and leave a constant MST weight. The rest of the functions increase with $n$, with higher dimensions having higher rates of increase as well as higher base weights. This made more sense intuitively. We graphed them (see below) and found that they resembled power functions, so we used power regression to fit our function estimates. This fits a function of the form $An^B$ and finds the best fit values for $A$ and $B$ (best as evaluated as having minimum sum of squared errors). In general these power functions fit very well (correlation coefficient $>$ 0.99). It also made sense that the power was less than 1: the functions grow more slowly as $n$ increases. This is because adding more nodes increases edge number in the MST linearly but decreases the average edge weight, because there are more low-weight edges relative to the number of edges we need.
 \\
 \\
 At no point did we find the random number generator to create any aberrant behavior. We seeded with the current time on each iteration, so while the numbers were generated pseudorandomly, the sequence was different each time.
+\newpage
+
 \end{document}
 
 

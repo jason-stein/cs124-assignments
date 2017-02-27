@@ -1,6 +1,6 @@
 /*
  *
- *	randmst.c
+ *	randmst.c 
  *
  *	Implements Kruskal's algorithm for finding Minimum Spanning Tree over
  *	a randomly-generated complete undirected graph. 
@@ -14,6 +14,8 @@
  *	Output is "average numpoints numtrials dimension" where average is the mean
  *	weight of the MST found over numtrials in a graph with numpoints vertices
  *	where locations are drawn from a unit object of dimension = dimension.
+ *
+ *	HUIDs : 40939695, 40907009
  *
  */
 
@@ -33,8 +35,8 @@ typedef struct set{
 
 // an edge is defined by two vertices and a weight
 typedef struct edge{
-	int v1;
-	int v2;
+	unsigned int v1;
+	unsigned int v2;
 	float weight;
 } edge;
 
@@ -130,7 +132,8 @@ int main(int argc, char* argv[]){
 				// otherwise we take this edge in the MST
 				nIncluded++;
 				total += ei.weight;
-				// printf("%d taking edge %d %d with weight %f\n", nIncluded, ei.v1, ei.v2, ei.weight);
+				// printf("%d taking edge %d %d with weight %f\n", 
+				// 	nIncluded, ei.v1, ei.v2, ei.weight);
 				// sets[ei.v1]->included = sets[ei.v2]->included = true;
 			}
 			index ++;
@@ -151,7 +154,7 @@ int main(int argc, char* argv[]){
 	clock_t end = clock();
 
 	// report
-	printf("Time spent: %f\n", (double)(end - begin) / CLOCKS_PER_SEC);
+	// printf("Time spent: %f seconds\n", (double)(end - begin) / CLOCKS_PER_SEC);
 	printf("%f %d %d %d\n", total, numpoints, numtrials, dimension);
 	return 0;
 }
@@ -160,7 +163,7 @@ int main(int argc, char* argv[]){
 edge* generate(int n, int dimension){
 	// seed the RNG with current time -- always new
 	srand(time(NULL));
-	int i, j;
+	unsigned int i, j;
 	// allocate an n * dimensions matrix to assign a location to every vertex
 	float** locations;
 	if (dimension > 0){
