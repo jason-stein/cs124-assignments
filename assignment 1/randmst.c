@@ -161,20 +161,23 @@ edge* generate(int n, int dimension){
 	srand(time(NULL));
 	int i, j;
 	// allocate an n * dimensions matrix to assign a location to every vertex
-	float** locations = (float**)malloc(n * sizeof(float*));
-	if (locations == NULL)
-		return NULL;
-	float* l;
-    for (i = 0; i < n; i++){
-        l = (float*)malloc(dimension * sizeof(float));
-    	if (l == NULL)
+	float** locations;
+	if (dimension > 0){
+		locations = (float**)malloc(n * sizeof(float*));
+		if (locations == NULL)
 			return NULL;
-		locations[i] = l;
-	}
-	// randomly assign coordinates
-	for(i = 0; i < n; i++){
-		for(j = 0; j < dimension; j++){
-			locations[i][j] = (float) rand() / (float) RAND_MAX;
+		float* l;
+	    for (i = 0; i < n; i++){
+	        l = (float*)malloc(dimension * sizeof(float));
+	    	if (l == NULL)
+				return NULL;
+			locations[i] = l;
+		}
+		// randomly assign coordinates
+		for(i = 0; i < n; i++){
+			for(j = 0; j < dimension; j++){
+				locations[i][j] = (float) rand() / (float) RAND_MAX;
+			}
 		}
 	}
 
@@ -187,14 +190,19 @@ edge* generate(int n, int dimension){
 			e = &edgeList[i*(i-1)/2+j]; // triangular numbers plus offset
 			e->v1 = i;
 			e->v2 = j;
-			e->weight = euclideanDist(locations[i], locations[j], dimension);
+			if (dimension == 0)
+				e->weight = (float) rand() / (float) RAND_MAX;
+			else
+				e->weight = euclideanDist(locations[i], locations[j], dimension);
 		}
 	}
 
 	// we don't need the locations anymore!
-	for(i = 0; i < n; i++)
-		free(locations[i]);
-	free(locations);
+	if (dimension > 0){
+		for(i = 0; i < n; i++)
+			free(locations[i]);
+		free(locations);
+	}
 
 	return (edgeList);
 }
