@@ -35,6 +35,7 @@
 			\multicolumn{1}{|l|}{8192}    & \multicolumn{1}{l|}{602.38}       & \multicolumn{1}{l|}{97.43}       \\ \hline
 			\multicolumn{1}{|l|}{16384}    & \multicolumn{1}{l|}{1009.21}       & \multicolumn{1}{l|}{403.647}       \\ \hline
 			\multicolumn{1}{|l|}{32768}    & \multicolumn{1}{l|}{1686.93}       & \multicolumn{1}{l|}{1512.621}       \\ \hline
+			\multicolumn{1}{|l|}{65536}    & \multicolumn{1}{l|}{2822.58}       & \multicolumn{1}{l|}{5598.697}       \\ \hline
 		\end{tabular}
 	\end{table}\\
 	Estimated $f(n)$: $f(n) = 0.781n^{0.739}$
@@ -95,6 +96,8 @@ The most surprising $f(n)$ was for dimension = 0, where we found that the weight
 \\
 \\
 At no point did we find the random number generator to create any aberrant behavior. We seeded with the current time on each iteration, so while the numbers were generated pseudorandomly, the sequence was different each time.
+\\\\
+Our code segfaults for the final value, $n=2^17$. We believe this is an integer overflow error that is causing indexing into bad memory, but we were unable to fix this.
 \newpage
 \includegraphics[width = \linewidth]{graph_labeled.png}
 \end{document}
